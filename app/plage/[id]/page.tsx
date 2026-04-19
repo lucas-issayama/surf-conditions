@@ -1,7 +1,14 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, MapPin, Waves, Wind, Thermometer, Activity } from "lucide-react";
+import {
+  ArrowLeft,
+  MapPin,
+  Waves,
+  Wind,
+  Thermometer,
+  Activity,
+} from "lucide-react";
 import { BEACHES, beachImage } from "@/lib/beaches";
 import { fetchForecast, degToCompass } from "@/lib/surf";
 import { DayCalendar } from "@/app/components/DayCalendar";
@@ -29,17 +36,17 @@ export default async function BeachPage({ params }: PageProps) {
   const today = days[0];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#061725] via-[#0a2a3f] to-[#061725] text-white">
+    <main className="min-h-screen bg-gradient-to-b from-[#e0f7ff] via-[#f0f9ff] to-[#e0f2fe] text-[#0c3a52]">
       <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col gap-10">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white w-fit"
+          className="inline-flex items-center gap-2 text-sm text-[#0c3a52]/70 hover:text-sky-600 w-fit font-medium"
         >
           <ArrowLeft className="w-4 h-4" />
           Retour aux spots
         </Link>
 
-        <div className="relative h-64 sm:h-80 rounded-3xl overflow-hidden border border-white/10">
+        <div className="relative h-72 sm:h-96 rounded-[2.5rem] overflow-hidden border-4 border-white shadow-xl shadow-sky-300/50">
           <Image
             src={beachImage(beach)}
             alt={`${beach.name} — ${beach.town}`}
@@ -48,16 +55,16 @@ export default async function BeachPage({ params }: PageProps) {
             priority
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#061725] via-[#061725]/50 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 text-white">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-cyan-300/80">
+              <p className="text-xs uppercase tracking-[0.3em] text-sky-200 font-medium">
                 Côtes-d&apos;Armor
               </p>
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mt-1">
+              <h1 className="font-display text-5xl sm:text-6xl mt-2 drop-shadow-lg">
                 {beach.name}
               </h1>
-              <p className="text-white/70 flex items-center gap-1 mt-2">
+              <p className="flex items-center gap-1 mt-2 text-white/90">
                 <MapPin className="w-4 h-4" />
                 {beach.town}
               </p>
@@ -65,23 +72,20 @@ export default async function BeachPage({ params }: PageProps) {
 
             {current && (
               <div
-                className="rounded-2xl px-5 py-4 border min-w-[160px] backdrop-blur-sm"
-                style={{
-                  backgroundColor: `${current.score.color}33`,
-                  borderColor: current.score.color,
-                }}
+                className="rounded-3xl px-6 py-4 border-2 min-w-[170px] bg-white shadow-lg"
+                style={{ borderColor: current.score.color }}
               >
-                <div className="text-xs uppercase tracking-widest text-white/80">
+                <div className="text-[11px] uppercase tracking-widest text-[#0c3a52]/60 font-medium">
                   Maintenant
                 </div>
                 <div
-                  className="text-4xl font-bold mt-1"
+                  className="font-display text-5xl leading-none mt-1"
                   style={{ color: current.score.color }}
                 >
                   {current.score.total.toFixed(1)}
                 </div>
                 <div
-                  className="text-sm font-medium"
+                  className="text-sm font-semibold mt-1"
                   style={{ color: current.score.color }}
                 >
                   {current.score.label}
@@ -91,10 +95,12 @@ export default async function BeachPage({ params }: PageProps) {
           </div>
         </div>
 
-        <p className="text-white/70 max-w-2xl -mt-4">{beach.description}</p>
+        <p className="text-lg text-[#0c3a52]/75 max-w-3xl leading-relaxed">
+          {beach.description}
+        </p>
 
         {!forecast && (
-          <p className="text-red-400">Impossible de récupérer la prévision.</p>
+          <p className="text-red-500">Impossible de récupérer la prévision.</p>
         )}
 
         {current && (
@@ -108,28 +114,30 @@ export default async function BeachPage({ params }: PageProps) {
             />
             <div className="grid grid-cols-2 gap-3 text-sm">
               <BigStat
-                icon={<Waves className="w-4 h-4" style={{ color: "#22d3ee" }} />}
+                icon={<Waves className="w-5 h-5 text-sky-600" />}
+                bg="#e0f2fe"
                 label="Vagues"
                 value={`${current.conditions.waveHeight.toFixed(1)} m`}
                 hint={`${degToCompass(current.conditions.waveDirection)} · ${current.conditions.wavePeriod.toFixed(0)}s`}
               />
               <BigStat
-                icon={<Activity className="w-4 h-4" style={{ color: "#818cf8" }} />}
+                icon={<Activity className="w-5 h-5 text-indigo-600" />}
+                bg="#e0e7ff"
                 label="Houle"
                 value={`${current.conditions.swellHeight.toFixed(1)} m`}
                 hint={`${current.conditions.swellPeriod.toFixed(0)}s`}
               />
               <BigStat
-                icon={<Wind className="w-4 h-4" style={{ color: "#a3e635" }} />}
+                icon={<Wind className="w-5 h-5 text-green-600" />}
+                bg="#dcfce7"
                 label="Vent"
                 value={`${current.conditions.windSpeed.toFixed(0)} km/h`}
                 hint={degToCompass(current.conditions.windDirection)}
               />
               <BigStat
-                icon={
-                  <Thermometer className="w-4 h-4" style={{ color: "#fb923c" }} />
-                }
-                label="Températures"
+                icon={<Thermometer className="w-5 h-5 text-orange-600" />}
+                bg="#ffedd5"
+                label="Temp."
                 value={`${current.conditions.airTemperature.toFixed(0)}°C air`}
                 hint={
                   current.conditions.waterTemperature != null
@@ -144,10 +152,10 @@ export default async function BeachPage({ params }: PageProps) {
         {days.length > 0 && (
           <section className="flex flex-col gap-4">
             <div className="flex items-baseline justify-between">
-              <h2 className="text-sm uppercase tracking-widest text-cyan-300/80">
-                Prévision {days.length} jours
+              <h2 className="font-display text-3xl text-[#0c3a52]">
+                Les {days.length} prochains jours
               </h2>
-              <span className="text-xs text-white/40">Europe/Paris</span>
+              <span className="text-xs text-[#0c3a52]/50">Europe/Paris</span>
             </div>
             <DayCalendar days={days} />
           </section>
@@ -167,8 +175,8 @@ export default async function BeachPage({ params }: PageProps) {
           />
         )}
 
-        <footer className="text-xs text-white/40 border-t border-white/10 pt-6">
-          Prévisions Open-Meteo, mises à jour toutes les 30 minutes.
+        <footer className="text-sm text-[#0c3a52]/60 border-t border-[#0c3a52]/10 pt-6 pb-4">
+          Prévisions Open-Meteo, mises à jour toutes les 30 minutes. 🤙
         </footer>
       </div>
     </main>
@@ -177,24 +185,35 @@ export default async function BeachPage({ params }: PageProps) {
 
 function BigStat({
   icon,
+  bg,
   label,
   value,
   hint,
 }: {
   icon: React.ReactNode;
+  bg: string;
   label: string;
   value: string;
   hint?: string;
 }) {
   return (
-    <div className="rounded-lg bg-white/5 border border-white/10 px-4 py-3 flex gap-3 items-start">
-      <div className="mt-0.5 shrink-0">{icon}</div>
+    <div className="rounded-2xl bg-white border border-stone-100 px-4 py-3 flex gap-3 items-start shadow-sm">
+      <div
+        className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0"
+        style={{ backgroundColor: bg }}
+      >
+        {icon}
+      </div>
       <div className="flex flex-col min-w-0">
-        <div className="text-[11px] uppercase tracking-wider text-white/50">
+        <div className="text-[11px] uppercase tracking-wider text-[#0c3a52]/50 font-medium">
           {label}
         </div>
-        <div className="text-white font-medium text-base">{value}</div>
-        {hint && <div className="text-xs text-white/50">{hint}</div>}
+        <div className="text-[#0c3a52] font-semibold text-base leading-tight">
+          {value}
+        </div>
+        {hint && (
+          <div className="text-xs text-[#0c3a52]/50">{hint}</div>
+        )}
       </div>
     </div>
   );

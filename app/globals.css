@@ -1,26 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f0f9ff;
+  --foreground: #0c3a52;
+  --foam: #ecfeff;
+  --sky: #7dd3fc;
+  --sky-deep: #0ea5e9;
+  --ocean: #0369a1;
+  --sand: #fef3d6;
+  --sunset: #fb923c;
+  --coral: #f87171;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-fredoka);
+  --font-display: var(--font-pacifico);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-fredoka), system-ui, sans-serif;
 }
+
+.font-display {
+  font-family: var(--font-pacifico), cursive;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Animation de vague : voir app/components/WavesBackground.tsx
+   (déformation fluide du path via requestAnimationFrame). */

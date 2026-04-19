@@ -7,7 +7,6 @@ type Props = {
 const VIEW_W = 320;
 const VIEW_H = 140;
 const BASELINE = 118;
-// Échelle : on réserve la moitié haute du cadre pour 3 m de hauteur
 const MAX_SCALE_M = 3;
 const PX_PER_M = (BASELINE - 20) / MAX_SCALE_M;
 
@@ -26,7 +25,11 @@ function wavePath(amplitudeM: number, wavelengthPx: number, phase = 0) {
   return points.join(" ");
 }
 
-export function WaveIllustration({ waveHeight, swellHeight, swellPeriod }: Props) {
+export function WaveIllustration({
+  waveHeight,
+  swellHeight,
+  swellPeriod,
+}: Props) {
   const rawWavelen = Math.max(4, swellPeriod) * 18;
   const wavelen = Math.min(rawWavelen, VIEW_W * 0.9);
 
@@ -38,36 +41,29 @@ export function WaveIllustration({ waveHeight, swellHeight, swellPeriod }: Props
   const waveRulerX = VIEW_W - 20;
   const swellRulerX = 20;
 
-  // Graduations de l'échelle verticale
   const ticks = [1, 2, 3];
 
   return (
-    <div className="rounded-lg bg-gradient-to-b from-[#0a2a3f] to-[#061725] border border-white/5 p-3">
+    <div className="rounded-2xl bg-gradient-to-b from-[#e0f7ff] via-[#bae6fd] to-[#7dd3fc] border border-sky-200 p-3 overflow-hidden relative">
       <svg
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-        className="w-full h-auto"
+        className="w-full h-auto relative"
         role="img"
         aria-label={`Vague ${waveHeight.toFixed(1)}m, houle ${swellHeight.toFixed(1)}m période ${swellPeriod.toFixed(0)}s`}
       >
         <defs>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0e3a56" />
-            <stop offset="100%" stopColor="#0a2a3f" />
+          <linearGradient id="swellFillLight" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0284c7" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#0284c7" stopOpacity="0.15" />
           </linearGradient>
-          <linearGradient id="swellFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#818cf8" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#818cf8" stopOpacity="0.05" />
-          </linearGradient>
-          <linearGradient id="waveFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.15" />
+          <linearGradient id="waveFillLight" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.4" />
           </linearGradient>
         </defs>
 
-        <rect x="0" y="0" width={VIEW_W} height={VIEW_H} fill="url(#sky)" />
-
-        {/* Graduations de référence (1m / 2m / 3m) */}
-        <g opacity="0.25">
+        {/* Graduations */}
+        <g opacity="0.45">
           {ticks.map((t) => {
             const y = BASELINE - t * PX_PER_M;
             return (
@@ -77,11 +73,11 @@ export function WaveIllustration({ waveHeight, swellHeight, swellPeriod }: Props
                   y1={y}
                   x2={VIEW_W}
                   y2={y}
-                  stroke="#ffffff"
+                  stroke="#0c3a52"
                   strokeDasharray="2 4"
                   strokeWidth="0.5"
                 />
-                <text x="4" y={y - 2} fill="#ffffff" fontSize="8">
+                <text x="4" y={y - 2} fill="#0c3a52" fontSize="8">
                   {t}m
                 </text>
               </g>
@@ -89,38 +85,43 @@ export function WaveIllustration({ waveHeight, swellHeight, swellPeriod }: Props
           })}
         </g>
 
-        {/* Houle : longue période, amplitude = swellHeight */}
+        {/* Houle */}
         <path
           d={wavePath(vSwell, wavelen, 0)}
-          fill="url(#swellFill)"
-          stroke="#818cf8"
-          strokeOpacity="0.6"
+          fill="url(#swellFillLight)"
+          stroke="#0369a1"
+          strokeOpacity="0.7"
           strokeWidth="1"
         />
 
-        {/* Vagues : période plus courte, amplitude = waveHeight */}
+        {/* Vagues */}
         <path
           d={wavePath(vWave, wavelen * 0.45, wavelen * 0.25)}
-          fill="url(#waveFill)"
-          stroke="#22d3ee"
-          strokeOpacity="0.9"
+          fill="url(#waveFillLight)"
+          stroke="#075985"
+          strokeOpacity="0.95"
           strokeWidth="1.2"
         />
 
-        {/* Ligne d'eau au repos */}
+        {/* Ligne d'eau */}
         <line
           x1="0"
           y1={BASELINE}
           x2={VIEW_W}
           y2={BASELINE}
-          stroke="#ffffff"
-          strokeOpacity="0.2"
+          stroke="#0c3a52"
+          strokeOpacity="0.3"
           strokeDasharray="3 3"
         />
 
-        {/* Règle hauteur de houle (gauche, indigo) */}
-        <g stroke="#818cf8" strokeWidth="1" opacity="0.9">
-          <line x1={swellRulerX} y1={BASELINE} x2={swellRulerX} y2={swellTopY} />
+        {/* Règle houle */}
+        <g stroke="#0369a1" strokeWidth="1.2" opacity="0.95">
+          <line
+            x1={swellRulerX}
+            y1={BASELINE}
+            x2={swellRulerX}
+            y2={swellTopY}
+          />
           <line
             x1={swellRulerX - 4}
             y1={BASELINE}
@@ -137,15 +138,15 @@ export function WaveIllustration({ waveHeight, swellHeight, swellPeriod }: Props
         <text
           x={swellRulerX + 6}
           y={(BASELINE + swellTopY) / 2 + 3}
-          fill="#a5b4fc"
+          fill="#0369a1"
           fontSize="10"
-          fontWeight="600"
+          fontWeight="700"
         >
           {swellHeight.toFixed(1)} m
         </text>
 
-        {/* Règle hauteur de vague (droite, cyan) */}
-        <g stroke="#22d3ee" strokeWidth="1" opacity="0.95">
+        {/* Règle vague */}
+        <g stroke="#075985" strokeWidth="1.2" opacity="0.95">
           <line x1={waveRulerX} y1={BASELINE} x2={waveRulerX} y2={waveTopY} />
           <line
             x1={waveRulerX - 4}
@@ -163,22 +164,22 @@ export function WaveIllustration({ waveHeight, swellHeight, swellPeriod }: Props
         <text
           x={waveRulerX - 6}
           y={(BASELINE + waveTopY) / 2 + 3}
-          fill="#22d3ee"
+          fill="#075985"
           fontSize="10"
           textAnchor="end"
-          fontWeight="600"
+          fontWeight="700"
         >
           {waveHeight.toFixed(1)} m
         </text>
 
-        {/* Indicateur de période */}
-        <g opacity="0.75">
+        {/* Période */}
+        <g opacity="0.85">
           <line
             x1={VIEW_W / 2 - wavelen / 2}
             y1={14}
             x2={VIEW_W / 2 + wavelen / 2}
             y2={14}
-            stroke="#818cf8"
+            stroke="#0c3a52"
             strokeWidth="1"
           />
           <line
@@ -186,7 +187,7 @@ export function WaveIllustration({ waveHeight, swellHeight, swellPeriod }: Props
             y1={10}
             x2={VIEW_W / 2 - wavelen / 2}
             y2={18}
-            stroke="#818cf8"
+            stroke="#0c3a52"
             strokeWidth="1"
           />
           <line
@@ -194,15 +195,16 @@ export function WaveIllustration({ waveHeight, swellHeight, swellPeriod }: Props
             y1={10}
             x2={VIEW_W / 2 + wavelen / 2}
             y2={18}
-            stroke="#818cf8"
+            stroke="#0c3a52"
             strokeWidth="1"
           />
           <text
             x={VIEW_W / 2}
             y={8}
-            fill="#a5b4fc"
+            fill="#0c3a52"
             fontSize="9"
             textAnchor="middle"
+            fontWeight="600"
           >
             période {swellPeriod.toFixed(0)}s
           </text>

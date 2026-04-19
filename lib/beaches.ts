@@ -11,11 +11,10 @@ export type Beach = {
   image?: string;
 };
 
-// Image de secours — image consistante par plage via Picsum.
-// Remplacez en passant une URL `image` dans la fiche correspondante.
+// Images locales dans public/beaches/. Pour (re)télécharger :
+//   node scripts/download-beach-images.mjs
 export function beachImage(beach: Beach): string {
-  if (beach.image) return beach.image;
-  return `https://picsum.photos/seed/surf-${beach.id}/900/500`;
+  return beach.image ?? `/beaches/${beach.id}.jpg`;
 }
 
 export const BEACHES: Beach[] = [

@@ -15,29 +15,29 @@ export function HourlyTable({ points, title }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      <h3 className="text-sm uppercase tracking-widest text-cyan-300/80">{title}</h3>
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm border-separate border-spacing-y-1 min-w-[560px]">
-          <thead className="text-[11px] uppercase tracking-wider text-white/40">
+      <h3 className="font-display text-2xl text-[#0c3a52]">{title}</h3>
+      <div className="overflow-x-auto rounded-2xl bg-white border border-stone-100 shadow-sm">
+        <table className="w-full text-sm min-w-[560px]">
+          <thead className="text-[11px] uppercase tracking-wider text-[#0c3a52]/50 bg-stone-50">
             <tr>
-              <th className="text-left px-2 py-1 font-normal">Heure</th>
-              <th className="text-left px-2 py-1 font-normal">
-                <Waves className="inline w-3 h-3 mr-1" />
+              <th className="text-left px-4 py-3 font-semibold">Heure</th>
+              <th className="text-left px-4 py-3 font-semibold">
+                <Waves className="inline w-3.5 h-3.5 mr-1 text-sky-500" />
                 Vagues
               </th>
-              <th className="text-left px-2 py-1 font-normal">
-                <Activity className="inline w-3 h-3 mr-1" />
+              <th className="text-left px-4 py-3 font-semibold">
+                <Activity className="inline w-3.5 h-3.5 mr-1 text-indigo-500" />
                 Houle
               </th>
-              <th className="text-left px-2 py-1 font-normal">
-                <Wind className="inline w-3 h-3 mr-1" />
+              <th className="text-left px-4 py-3 font-semibold">
+                <Wind className="inline w-3.5 h-3.5 mr-1 text-green-600" />
                 Vent
               </th>
-              <th className="text-right px-2 py-1 font-normal">Note</th>
+              <th className="text-right px-4 py-3 font-semibold">Note</th>
             </tr>
           </thead>
           <tbody>
-            {visible.map((p) => {
+            {visible.map((p, i) => {
               const d = new Date(p.time);
               const hour = d.toLocaleTimeString("fr-FR", {
                 hour: "2-digit",
@@ -45,26 +45,31 @@ export function HourlyTable({ points, title }: Props) {
                 timeZone: "Europe/Paris",
               });
               return (
-                <tr key={p.time} className="bg-white/[0.03] hover:bg-white/[0.07]">
-                  <td className="px-2 py-2 rounded-l-lg text-white/80">{hour}</td>
-                  <td className="px-2 py-2 text-white/80">
+                <tr
+                  key={p.time}
+                  className={`${i % 2 ? "bg-sky-50/40" : ""} hover:bg-sky-100/60 transition`}
+                >
+                  <td className="px-4 py-2.5 text-[#0c3a52]/80 font-medium">
+                    {hour}
+                  </td>
+                  <td className="px-4 py-2.5 text-[#0c3a52]/80">
                     {p.conditions.waveHeight.toFixed(1)} m ·{" "}
-                    <span className="text-white/50">
+                    <span className="text-[#0c3a52]/50">
                       {p.conditions.wavePeriod.toFixed(0)}s
                     </span>
                   </td>
-                  <td className="px-2 py-2 text-white/70">
+                  <td className="px-4 py-2.5 text-[#0c3a52]/70">
                     {p.conditions.swellHeight.toFixed(1)} m ·{" "}
                     {p.conditions.swellPeriod.toFixed(0)}s
                   </td>
-                  <td className="px-2 py-2 text-white/70">
+                  <td className="px-4 py-2.5 text-[#0c3a52]/70">
                     {p.conditions.windSpeed.toFixed(0)} km/h{" "}
-                    <span className="text-white/50">
+                    <span className="text-[#0c3a52]/50">
                       {degToCompass(p.conditions.windDirection)}
                     </span>
                   </td>
                   <td
-                    className="px-2 py-2 rounded-r-lg text-right font-semibold"
+                    className="px-4 py-2.5 text-right font-display text-lg"
                     style={{ color: p.score.color }}
                   >
                     {p.score.total.toFixed(1)}
